@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BE G2 Rehearsal Fixture — Cart</title>
+
+<!-- ============================================================
+     TAG ORDER IS DELIBERATE. Same block as the other pages, PLUS one
+     extra inert event unique to this page (see 4).
+       1. dataLayer + gtag() + consent default
+       2. standing gtag.js  -> simulates Site Kit's own GA4 tag
+       3. GTM container     -> the container under rehearsal
+       4. inert cart_view   -> THIS PAGE'S PROTECTED SIGNATURE
+     ============================================================ -->
+
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('consent', 'default', {
+    'ad_storage': 'denied',
+    'ad_user_data': 'denied',
+    'ad_personalization': 'denied',
+    'analytics_storage': 'granted',
+    'functionality_storage': 'granted',
+    'security_storage': 'granted'
+  });
+</script>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-GLDQXPVHGV"></script>
+<script>
+  gtag('js', new Date());
+  gtag('config', 'G-GLDQXPVHGV');
+</script>
+
+<!-- REPLACE GTM-XXXXXXX -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-XXXXXXX');</script>
+
+<!-- 4. THE PROTECTED SIGNATURE. Inert (no real commerce, no value that means
+     anything) but distinctive: one cart_view event with fixed params. The 5b
+     gate compares this page's wire output at three checkpoints — baseline,
+     post-publish, post-rollback — and ANY delta fails the gate and triggers
+     rollback. This is the stand-in for a client's live money path. -->
+<script>
+  gtag('event', 'cart_view', {
+    'fixture': 'g2',
+    'items_in_cart': 1,
+    'cart_id': 'REHEARSAL-FIXED-0001'
+  });
+</script>
+
+<style>
+  body{font:16px/1.6 system-ui,sans-serif;max-width:44rem;margin:3rem auto;padding:0 1.5rem;color:#222}
+  nav a{margin-right:1rem}
+  .role{background:#fdf3f3;border-left:4px solid #c44;padding:.75rem 1rem;margin:1.5rem 0;font-size:.9rem}
+  .line{border-top:1px solid #ddd;padding:.6rem 0}
+</style>
+</head>
+<body>
+<!-- REPLACE GTM-XXXXXXX -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-XXXXXXX"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+
+<nav><a href="/">Home</a><a href="/article/">Article</a><a href="/cart/">Cart</a></nav>
+
+<h1>Cart</h1>
+
+<div class="role">
+  <strong>Role of this page: THE PROTECTED PATH (negative control #2).</strong><br>
+  Stands in for a client's live commerce path. The rehearsal tag
+  <strong>must not fire here</strong>, and this page's wire signature — tag
+  inventory, tids, event names, hit counts — must be
+  <strong>byte-identical at baseline, post-publish and post-rollback</strong>.
+  Any delta fails 5b-quick and triggers immediate rollback, whatever else passed.
+</div>
+
+<div class="line">Rehearsal Item — inert, not a real product · 1 × $0.00</div>
+<div class="line"><strong>Total: $0.00</strong></div>
+<p><em>Nothing here transacts. No payment surface, by design.</em></p>
+</body>
+</html>
