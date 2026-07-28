@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BE G2 Rehearsal Fixture — Home</title>
+
+<!-- ============================================================
+     TAG ORDER IS DELIBERATE. Do not reorder.
+       1. dataLayer + gtag() + consent default   (must precede ALL tags)
+       2. standing gtag.js  -> simulates Site Kit's own GA4 tag
+       3. GTM container     -> the container under rehearsal
+     This mirrors a Newspack site: Site Kit's gtag already on the page,
+     GTM added alongside it. Same measurement ID on purpose — that is what
+     makes a double-fire observable (different IDs would hide it).
+     ============================================================ -->
+
+<!-- 1. Consent Mode default. analytics_storage GRANTED so hits flow and can be
+     observed; ad_storage DENIED so there is a real consent signal on the wire
+     (expect gcs=G1-- rather than G111). No CMP here by design. -->
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('consent', 'default', {
+    'ad_storage': 'denied',
+    'ad_user_data': 'denied',
+    'ad_personalization': 'denied',
+    'analytics_storage': 'granted',
+    'functionality_storage': 'granted',
+    'security_storage': 'granted'
+  });
+</script>
+
+<!-- 2. Standing gtag — the "Site Kit" stand-in. SANDBOX stream. -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-GLDQXPVHGV"></script>
+<script>
+  gtag('js', new Date());
+  gtag('config', 'G-GLDQXPVHGV');
+</script>
+
+<!-- 3. GTM container under rehearsal. REPLACE GTM-XXXXXXX. -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-XXXXXXX');</script>
+
+<style>
+  body{font:16px/1.6 system-ui,sans-serif;max-width:44rem;margin:3rem auto;padding:0 1.5rem;color:#222}
+  nav a{margin-right:1rem}
+  .role{background:#f4f6f8;border-left:4px solid #456;padding:.75rem 1rem;margin:1.5rem 0;font-size:.9rem}
+</style>
+</head>
+<body>
+<!-- GTM noscript. REPLACE GTM-XXXXXXX. -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-XXXXXXX"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+
+<nav><a href="/">Home</a><a href="/article/">Article</a><a href="/cart/">Cart</a></nav>
+
+<h1>Blue Engine — G2 rehearsal fixture</h1>
+<p>Static test site for the deployed-GTM lane rehearsal. Not a real product page.</p>
+
+<div class="role">
+  <strong>Role of this page: NEGATIVE CONTROL #1 (homepage-equivalent).</strong><br>
+  The container loads here, but the tag built during the rehearsal is scoped to
+  <code>/article/</code> and <strong>must not fire on this page</strong>.
+</div>
+
+<p>Home template body copy. Distinct from the article template so page-based
+triggers and template divergence are testable.</p>
+</body>
+</html>
